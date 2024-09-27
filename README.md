@@ -9,7 +9,7 @@
 </div>
 
 ## Notice
-This repo is actively updating.
+This repo is being actively updated.
 * The paper is accepted to NeurIPS 2024.
 
 ## Dependencies
