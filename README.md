@@ -31,3 +31,9 @@ Run `bash ./scripts/train_blast.sh`. The script assumes that 4 gpus are availabl
 
 ## Evaluation using `lm-evaluation-harness`
 Run `bash scripts/lm-eval-blast.sh`.
+
+
+## Acklowledgment
+
+This repo is highly inspired by [huggingface/transformers](https://github.com/huggingface/transformers/tree/main).
+
