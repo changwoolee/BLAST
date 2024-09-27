@@ -1,8 +1,11 @@
 # BLAST: Block Level Adaptive Structured Matrix for Efficient Deep Neural Network Inference
 
-** Changwoo Lee, Soo Min Kwon, Qing Qu, and Hun-Seok Kim **
+**[Changwoo Lee](http://changwoolee.github.io), [Soo Min Kwon](https://soominkwon.github.io), [Qing Qu](https://qingqu.engin.umich.edu), and [Hun-Seok Kim](https://kim.engin.umich.edu)**
 
+
+## Notice
 This repo is actively updating.
+* The paper is accepted to NeurIPS 2024.
 
 ## Dependencies
 
