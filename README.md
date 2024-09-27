@@ -1,4 +1,5 @@
 <div align="center">
+ 
 # BLAST: Block Level Adaptive Structured Matrix for Efficient Deep Neural Network Inference
 
 **[Changwoo Lee](http://changwoolee.github.io), [Soo Min Kwon](https://soominkwon.github.io), [Qing Qu](https://qingqu.engin.umich.edu), and [Hun-Seok Kim](https://kim.engin.umich.edu)**
