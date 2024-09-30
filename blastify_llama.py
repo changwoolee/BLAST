@@ -64,25 +64,14 @@ def main():
     args = parse_args()
     model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path)
 
-    #ranks = {"q_proj": 2048, "k_proj": 2048, "v_proj": 2048, "o_proj": 2048, "gate_proj": 2976, "up_proj": 2976, "down_proj": 2976,}
-    #ranks = {"q_proj": 688, "k_proj": 688, "gate_proj": 1008, "up_proj": 1008}
-    #ranks = {"q_proj": 1216, "k_proj": 1216, "v_proj": 1216, "o_proj": 1216, "gate_proj": 1776, "up_proj": 1776, "down_proj": 1776,}
-    #ranks = {"q_proj": 1200, "k_proj": 1200, "v_proj": 1200, "o_proj": 1200, "gate_proj": 1760, "up_proj": 1760, "down_proj": 1760,}
     ranks = {"q_proj": 1024, "k_proj": 1024, "v_proj": 1024, "o_proj": 1024, "gate_proj": 1488, "up_proj": 1488, "down_proj": 1488,}
-    #ranks = {"q_proj": 1040, "k_proj": 1040, "v_proj": 1040, "o_proj": 1040, "gate_proj": 1488, "up_proj": 1488, "down_proj": 1488,}
     targets = ranks.keys()
 
     if args.type == 'blast':
         args.output_dir = os.path.join(args.output_dir, f"comp{args.comp_ratio}-nb{args.num_blocks}-ni{args.num_iter}-delta{args.delta}")
-    elif args.type == 'lowrank':
-        args.output_dir = os.path.join(args.output_dir, f"comp{args.comp_ratio}")
-    elif args.type == 'monarch':
-        args.output_dir = os.path.join(args.output_dir, f"comp{args.comp_ratio}-nb{args.num_blocks}")
     else:
         raise NotImplementedError()
     device = torch.device("cuda")
-    #if not os.path.exists(args.output_dir):
-    #    os.makedirs(args.output_dir)
     target_layers = []
     for tl in args.target_layers:
         if '-' in tl:

@@ -22,7 +22,6 @@ class BlastLlamaConfig(LlamaConfig):
         blast_num_blocks: Union[Union[List, Tuple], int] = 4,
         indices=[i for i in range(32)],
         precompute_matrix=False,
-        #blast_decomposed_weight_path=None,
         **kwargs,
     ):
         self.target_modules = target_modules
@@ -30,7 +29,6 @@ class BlastLlamaConfig(LlamaConfig):
         self.blast_num_blocks = blast_num_blocks,
         self.indices = indices
         self.precompute_matrix = precompute_matrix
-        #self.blast_decomposed_weight_path = blast_decomposed_weight_path
         super().__init__(**kwargs)
 
 
@@ -97,39 +95,6 @@ def replace_layers_with_blast(
                         precompute_matrix=precompute_matrix,
                     )
                     
-                    #if blast_decomposed_weight_path is not None:
-                    #    layer_idx, weight_type = mn.split(".")[-3], mn.split(".")[-1]
-                    #    w_path = os.path.join(blast_decomposed_weight_path, layer_idx, weight_type)
-                    #    logger.info(f"Loading weights from {w_path}.")
-                    #    try:
-                    #        B = torch.load(w_path+"-B.tensor", map_location=m.weight.device, weights_only=True)
-                    #        C = torch.load(w_path+"-C.tensor", map_location=m.weight.device, weights_only=True)
-                    #        D = torch.load(w_path+"-D.tensor", map_location=m.weight.device, weights_only=True) # r b1 b2
-                    #        B_norm = torch.norm(B, dim=1, keepdim=True) # b1 1 r
-                    #        C_norm = torch.norm(C, dim=2, keepdim=True) # b2 r 1
-                    #        B = B / B_norm
-                    #        C = C / C_norm
-                    #        D = D * B_norm.permute(2,0,1) * C_norm.permute(1,2,0)
-
-                    #        assert B.shape[0] == D.shape[1]
-                    #        assert C.shape[0] == D.shape[2]
-                    #        assert B.shape[2] == C.shape[1] == D.shape[0]
-                    #        assert B.shape[0]*B.shape[1] == m.weight.shape[0]
-                    #        assert C.shape[0]*C.shape[2] == m.weight.shape[1]
-                    #        rank, b1, b2 = D.shape
-                    #
-                    #        with torch.no_grad():
-                    #            new_layer.B.copy_(B.to(dtype=m.weight.dtype))
-                    #            new_layer.C.copy_(C.to(dtype=m.weight.dtype))
-                    #            new_layer.D.copy_(D.to(dtype=m.weight.dtype).permute(1,2,0))
-                    #            if m.bias is not None:
-                    #                new_layer.bias.copy_(m.bias)
-                    #            for p in new_layer.parameters():
-                    #                p.requires_grad_(True)
-
-                    #    except FileNotFoundError:
-                    #        logger.info("Decomposed weight file not found. Skipping...")
-
                     parent_module = get_parent(model, mn)
                     child_name = mn.split(".")[-1]
                     parent_module.add_module(child_name, new_layer)
@@ -207,21 +172,6 @@ class BlastLinear(torch.nn.Module):
             out = torch.nn.functional.linear(x, A)
             
         else:
-            #x_shape = x.shape
-            #x = x.flatten(0,-2)
-
-            #x = x.view(-1, self.num_blocks[1], x.shape[-1]//self.num_blocks[1]).transpose(0,1)
-            #y = torch.bmm(x, self.C.transpose(1,2)) # (nb, n, rank)
-
-            #z = 0
-            #for j in range(self.num_blocks[1]):
-            #    Dj = self.D[:,j,:]  # (b1, rank)
-            #    yj = y[j,:,:] # (n, rank)
-            #    z += yj.unsqueeze(0) * Dj.unsqueeze(1)
-
-            #out = torch.bmm(z, self.B.transpose(1,2))
-            #out = out.transpose(0,1).reshape(*(x_shape[:-1] + (self.out_features,)))
-
 
             x_shape = x.shape
             x = x.flatten(0,-2)
@@ -265,9 +215,7 @@ class BlastLlamaModel(LlamaModel):
             config.blast_num_blocks,
             config.indices,
             config.precompute_matrix,
-            #config.blast_decomposed_weight_path,
         )
-        #config.blast_decomposed_weight_path = None
 
         self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
         self.rotary_emb = LlamaRotaryEmbedding(config=config)
@@ -291,7 +239,6 @@ class BlastModelForCausalLM(LlamaForCausalLM):
 def main():
     from transformers import AutoConfig, AutoModelForCausalLM
     logging.basicConfig(level=logging.INFO)
-    #blast_decomposed_weight_path = "./decomposed_weights/llama7b-blast-qkug-flat/comp0.6-nb4-ni300-delta0.1/"
     config = BlastLlamaConfig.from_pretrained("huggyllama/llama-7b", blast_num_blocks=4)
     print(config)
     model = BlastModelForCausalLM.from_pretrained("huggyllama/llama-7b", config=config)
