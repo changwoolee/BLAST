@@ -37,3 +37,16 @@ Run `bash scripts/lm-eval-blast.sh`.
 
 This repo is highly inspired by [huggingface/transformers](https://github.com/huggingface/transformers/tree/main).
 
+## Citation
+
+Please cite our paper if you find this repo or our paper useful
+```
+@inproceedings{
+lee2024blast,
+title={{BLAST}: Block-Level Adaptive Structured Matrices for Efficient Deep Neural Network Inference},
+author={Lee, Changwoo and Kwon, Soo Min and Qu, Qing and Kim, Hun-Seok},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+}
+```
+
