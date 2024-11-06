@@ -46,13 +46,16 @@ Run `bash ./scripts/decompose_llama.sh 0-31`.
 ## Blast-Llama Retraining
 Run `bash ./scripts/train_blast.sh`. The script assumes that 4 gpus are available.
 
+We re-trained the compressed Llama model for 400 steps on a subset of SlimPajama dataset available at [here](https://huggingface.co/datasets/DKYoon/SlimPajama-6B).
+
 ## Evaluation using `lm-evaluation-harness`
 Run `bash scripts/lm-eval-blast.sh`.
 
 
 ## Acklowledgment
 
-This repo is highly inspired by [huggingface/transformers](https://github.com/huggingface/transformers/tree/main).
+This repo is highly inspired by [huggingface/transformers](https://github.com/huggingface/transformers/tree/main) and [EleutherAI/lm-evaluation-harness
+](https://github.com/EleutherAI/lm-evaluation-harness).
 
 ## Citation
 
