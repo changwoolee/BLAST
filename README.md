@@ -14,6 +14,7 @@ University of Michigan
 
 ## Notice
 This repo is being actively updated.
+* [Blast-Llama-4B](https://huggingface.co/cwoolee/blast-llama-4B) is now available on Hugging Face! 🤗 
 * [arXiv](https://arxiv.org/abs/2410.21262) version is available!
 * The paper is accepted to NeurIPS 2024.
 
@@ -25,6 +26,17 @@ Additionally, install `lm-evaluation-harness` with BLAST implementation via
 ```bash
 cd lm-evaluation-harness
 pip install -e .
+```
+
+## Blast-Llama-4B Model
+
+Blast-Llama-4B is a Llama-7B model compressed by 50% via the procedure described below.
+The model can be loaded using `transformers` library.
+```python
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained("huggyllama/llama-7b")
+model = AutoModelForCausalLM.from_pretrained("cwoolee/blast-llama-4B", trust_remote_code=True)
 ```
 
 ## Llama Decompsotion
